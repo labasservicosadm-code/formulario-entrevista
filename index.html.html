@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Entrevista Operacional — LABAS</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
+
+  :root {
+    --bg: #F5F3EE;
+    --surface: #FFFFFF;
+    --border: #DDD9D0;
+    --accent: #1A472A;
+    --accent-light: #E8F0EB;
+    --accent2: #C17F3A;
+    --text: #1C1B18;
+    --muted: #7A7669;
+    --danger: #C0392B;
+    --section-num: #E8F0EB;
+    --radius: 10px;
+    --shadow: 0 2px 12px rgba(0,0,0,0.07);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 24px 16px 60px;
+  }
+
+  .header {
+    max-width: 720px;
+    margin: 0 auto 28px;
+    background: var(--accent);
+    color: white;
+    border-radius: 14px;
+    padding: 28px 32px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .header-logo {
+    font-family: 'DM Mono', monospace;
+    font-size: 28px;
+    font-weight: 500;
+    letter-spacing: -1px;
+    color: #A8D5B5;
+    white-space: nowrap;
+  }
+
+  .header-info h1 {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+    color: white;
+  }
+
+  .header-info p {
+    font-size: 13px;
+    color: #9DC8AB;
+    margin-top: 3px;
+  }
+
+  .date-row {
+    max-width: 720px;
+    margin: 0 auto 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+  }
+
+  .section {
+    max-width: 720px;
+    margin: 0 auto 16px;
+    background: var(--surface);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+  }
+
+  .section-num {
+    background: var(--accent);
+    color: white;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .section-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+  }
+
+  .section-body { padding: 18px 20px; }
+
+  .field { margin-bottom: 18px; }
+  .field:last-child { margin-bottom: 0; }
+
+  label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 7px;
+  }
+
+  label span.req { color: var(--accent2); margin-left: 2px; }
+  label span.tip {
+    font-weight: 400;
+    color: var(--muted);
+    font-size: 11.5px;
+    margin-left: 4px;
+  }
+
+  input[type="text"], input[type="date"], textarea, select {
+    width: 100%;
+    padding: 9px 13px;
+    border: 1.5px solid var(--border);
+    border-radius: 7px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    color: var(--text);
+    background: var(--bg);
+    transition: border 0.15s;
+    outline: none;
+  }
+
+  input[type="text"]:focus, textarea:focus, select:focus, input[type="date"]:focus {
+    border-color: var(--accent);
+    background: white;
+  }
+
+  textarea { resize: vertical; min-height: 64px; }
+
+  .radio-grid {
+    display: grid;
+    gap: 7px;
+  }
+
+  .radio-grid.cols2 { grid-template-columns: 1fr 1fr; }
+  .radio-grid.cols3 { grid-template-columns: 1fr 1fr 1fr; }
+
+  .radio-option {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 9px 12px;
+    border: 1.5px solid var(--border);
+    border-radius: 7px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: all 0.12s;
+    user-select: none;
+    background: var(--bg);
+  }
+
+  .radio-option:hover { border-color: var(--accent); background: var(--accent-light); }
+  .radio-option.selected { border-color: var(--accent); background: var(--accent-light); color: var(--accent); font-weight: 500; }
+
+  .radio-option input[type="radio"],
+  .radio-option input[type="checkbox"] {
+    width: 15px;
+    height: 15px;
+    accent-color: var(--accent);
+    flex-shrink: 0;
+  }
+
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  .three-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+  }
+
+  .inline-label {
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--muted);
+    margin-bottom: 5px;
+  }
+
+  /* Seção avaliação */
+  .eval-section .section-header { background: var(--accent); }
+  .eval-section .section-header .section-num { background: rgba(255,255,255,0.2); }
+  .eval-section .section-header .section-title { color: white; }
+  .eval-section .section-body { background: #FAFAF7; }
+
+  .verdict-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 0;
+  }
+
+  .verdict-btn {
+    padding: 14px 10px;
+    border-radius: 8px;
+    border: 2px solid var(--border);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+    background: white;
+    transition: all 0.15s;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+  }
+
+  .verdict-btn.aprovado:hover, .verdict-btn.aprovado.active { background: #E8F5EC; border-color: #2E7D32; color: #2E7D32; }
+  .verdict-btn.banco:hover, .verdict-btn.banco.active { background: #FFF8E1; border-color: #F9A825; color: #9A6000; }
+  .verdict-btn.nao:hover, .verdict-btn.nao.active { background: #FDECEA; border-color: #C62828; color: #C62828; }
+
+  .stars {
+    display: flex;
+    gap: 6px;
+  }
+
+  .star {
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--border);
+    transition: color 0.1s;
+    line-height: 1;
+  }
+
+  .star.lit { color: var(--accent2); }
+
+  .submit-row {
+    max-width: 720px;
+    margin: 24px auto 0;
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+  }
+
+  .btn {
+    padding: 12px 28px;
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.15s;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: white;
+  }
+  .btn-primary:hover { background: #143D22; }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--muted);
+    border: 1.5px solid var(--border);
+  }
+  .btn-secondary:hover { border-color: var(--muted); color: var(--text); }
+
+  .progress-bar {
+    max-width: 720px;
+    margin: 0 auto 20px;
+    background: var(--border);
+    border-radius: 99px;
+    height: 4px;
+  }
+
+  .progress-fill {
+    height: 4px;
+    background: var(--accent);
+    border-radius: 99px;
+    width: 0%;
+    transition: width 0.4s ease;
+  }
+
+  .tag-row { display: flex; flex-wrap: wrap; gap: 7px; }
+
+  .tag {
+    padding: 7px 13px;
+    border-radius: 20px;
+    border: 1.5px solid var(--border);
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.12s;
+    background: var(--bg);
+    user-select: none;
+  }
+
+  .tag:hover { border-color: var(--accent); color: var(--accent); }
+  .tag.selected { background: var(--accent-light); border-color: var(--accent); color: var(--accent); }
+
+  @media (max-width: 500px) {
+    .two-col, .three-col, .radio-grid.cols2, .radio-grid.cols3 { grid-template-columns: 1fr 1fr; }
+    .verdict-grid { grid-template-columns: 1fr; }
+    .date-row { grid-template-columns: 1fr; }
+    .header { flex-direction: column; gap: 10px; text-align: center; }
+  }
+
+  .divider { border: none; border-top: 1px solid var(--border); margin: 14px 0; }
+
+  .nota-tag {
+    display: inline-block;
+    background: var(--accent-light);
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-left: 6px;
+    vertical-align: middle;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .print-note {
+    max-width: 720px;
+    margin: 0 auto 14px;
+    font-size: 12px;
+    color: var(--muted);
+    text-align: right;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-logo">LABAS</div>
+  <div class="header-info">
+    <h1>Entrevista Operacional</h1>
+    <p>Formulário de seleção — Serviços de Limpeza e Facilities</p>
+  </div>
+</div>
+
+<div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+<div class="print-note">🖨️ Ctrl+P para imprimir / PDF</div>
+
+<!-- BLOCO 1: Dados básicos -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-num">1</div>
+    <div class="section-title">Dados do Candidato</div>
+  </div>
+  <div class="section-body">
+    <div class="two-col">
+      <div class="field">
+        <label>Nome completo <span class="req">*</span></label>
+        <input type="text" placeholder="Nome e sobrenome" oninput="updateProgress()">
+      </div>
+      <div class="field">
+        <label>Data de nascimento</label>
+        <input type="date">
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="field">
+        <label>Telefone / WhatsApp <span class="req">*</span></label>
+        <input type="text" placeholder="(xx) xxxxx-xxxx">
+      </div>
+      <div class="field">
+        <label>Data da entrevista <span class="req">*</span></label>
+        <input type="date" id="dataEntrevista">
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="field">
+        <label>Bairro / Cidade</label>
+        <input type="text" placeholder="Ex: Paulista, Piracicaba">
+      </div>
+      <div class="field">
+        <label>Entrevistador</label>
+        <input type="text" placeholder="Nome de quem aplicou">
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Cargo pretendido</label>
+      <div class="tag-row" id="cargo">
+        <div class="tag" onclick="toggleTag(this)">Auxiliar de Limpeza</div>
+        <div class="tag" onclick="toggleTag(this)">Auxiliar de Manutenção</div>
+        <div class="tag" onclick="toggleTag(this)">Recepcionista</div>
+        <div class="tag" onclick="toggleTag(this)">Líder / Encarregado(a)</div>
+        <div class="tag" onclick="toggleTag(this)">Cobertura / Eventual</div>
+        <div class="tag" onclick="toggleTag(this)">Qualquer vaga</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BLOCO 2: Experiência -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-num">2</div>
+    <div class="section-title">Experiência Profissional</div>
+  </div>
+  <div class="section-body">
+
+    <div class="field">
+      <label>Tem experiência com limpeza ou conservação? <span class="req">*</span></label>
+      <div class="radio-grid cols2">
+        <label class="radio-option" onclick="selectRadio(this,'exp')">
+          <input type="radio" name="exp"> Sim, com carteira assinada
+        </label>
+        <label class="radio-option" onclick="selectRadio(this,'exp')">
+          <input type="radio" name="exp"> Sim, sem carteira (informal)
+        </label>
+        <label class="radio-option" onclick="selectRadio(this,'exp')">
+          <input type="radio" name="exp"> Só em casa / nenhuma registrada
+        </label>
+        <label class="radio-option" onclick="selectRadio(this,'exp')">
+          <input type="radio" name="exp"> Sem experiência na área
+        </label>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Quanto tempo de experiência na área?</label>
+      <div class="radio-grid cols3">
+        <label class="radio-option" onclick="selectRadio(this,'tempo')">
+          <input type="radio" name="tempo"> Menos de 6 meses
+        </label>
+        <label class="radio-option" onclick="selectRadio(this,'tempo')">
+          <input type="radio" name="tempo"> 6 a 12 meses
+        </label>
+        <label class="radio-option" onclick="selectRadio(this,'tempo')">
+          <input type="radio" name="tempo"> 1 a 3 anos
+        </label>
+        <label class="radio-option" onclick="selectRadio(this,'tempo')">
+          <input type="radio" name="tempo"> 3 a 5 anos
+        </label>
+        <label class="radio-option" onclick="selectRadio(this,'tempo')">
+          <input type="radio" name="tempo"> Mais de 5 anos
+        </label>
+        <label class="radio-option" onclick="selectRadio(this,'tempo')">
+          <input type="radio" name="tempo"> Não tem
+        </label>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Tipos de ambiente onde já trabalhou <span class="tip">(pode marcar mais de um)</span></label>
+      <div class="tag-row" id="ambiente">
+        <div class="tag" onclick="toggleTag(this)">Escola / Colégio</div>
+        <div class="tag" onclick="toggleTag(this)">Condomínio / Prédio</div>
+        <div class="tag" onclick="toggleTag(this)">Hospital / Clínica</div>
+        <div class="tag" onclick="toggleTag(this)">Empresa / Escritório</div>
+        <div class="tag" onclick="toggleTag(this)">Órgão público</div>
+        <div class="tag" onclick="toggleTag(this)">Residência</div>
+        <div class="tag" onclick="toggleTag(this)">Área externa / Jardins</div>
+        <div class="tag" onclick="toggleTag(this)">Outro</div>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="field">
+        <label>Último emprego — onde foi?</label>
+        <input type="text" placeholder="Nome da empresa / local">
+      </div>
+      <div class="field">
+        <label>Por que saiu?</label>
+        <input type="text" placeholder="Resposta resumida">
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Tem experiência com algum desses produtos / equipamentos?</label>
+      <div class="tag-row">
+        <div class="tag" onclick="toggleTag(this)">Enceradeira</div>
+        <div class="tag" onclick="toggleTag(this)">Aspirador industrial</div>
+        <div class="tag" onclick="toggleTag(this)">Rodo e vassoura profissional</div>
+        <div class="tag" onclick="toggleTag(this)">Produtos químicos concentrados</div>
+        <div class="tag" onclick="toggleTag(this)">Andaime / escada alta</div>
+        <div class="tag" onclick="toggleTag(this)">Nenhum específico</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- BLOCO 3: Disponibilidade e logística -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-num">3</div>
+    <div class="section-title">Disponibilidade e Logística</div>
+  </div>
+  <div class="section-body">
+
+    <div class="field">
+      <label>Como vai se deslocar até o trabalho? <span class="req">*</span></label>
+      <div class="radio-grid cols2">
+        <label class="radio-option" onclick="selectRadio(this,'transp')">
+          <input type="radio" name="transp"> Transporte público (ônibus/metrô)
+        </label>
+        <label class="radio-option" onclick="selectRadio(this,'transp')">
+          <input type="radio" name="transp"> Moto / bicicleta própria
+        </label>
+        <label class="radio-option" onclick="selectRadio(this,'transp')">
+          <input type="radio" name="transp"> Carro próprio
+        </label>
+        <label class="radio-option" onclick="selectRadio(this,'transp')">
+          <input type="radio" name="transp"> Carona combinada
+        </label>
+        <label class="radio-option" onclick="selectRadio(this,'transp')">
+          <input type="radio" name="transp"> A pé
+        </label>
+        <label class="radio-option" onclick="selectRadio(this,'transp')">
+          <input type="radio" name="transp"> Ainda não sabe / a definir
+        </label>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="field">
+        <label>Tempo de deslocamento estimado</label>
+        <div class="radio-grid">
+          <label class="radio-option" onclick="selectRadio(this,'dist')">
+            <input type="radio" name="dist"> Até 20 min
+          </label>
+          <label class="radio-option" onclick="selectRadio(this,'dist')">
+            <input type="radio" name="dist"> 20 a 40 min
+          </label>
+          <label class="radio-option" onclick="selectRadio(this,'dist')">
+            <input type="radio" name="dist"> 40 min a 1h
+          </label>
+          <label class="radio-option" onclick="selectRadio(this,'dist')">
+            <input type="radio" name="dist"> Mais de 1h
+          </label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Turno de preferência</label>
+        <div class="radio-grid">
+          <label class="radio-option" onclick="selectRadio(this,'turno')">
+            <input type="radio" name="turno"> Manhã (ex: 6h–14h)
+          </label>
+          <label class="radio-option" onclick="selectRadio(this,'turno')">
+            <input type="radio" name="turno"> Comercial (7h–17h)
+          </label>
+          <label class="radio-option" onclick="selectRadio(this,'turno')">
+            <input type="radio" name="turno"> Tarde/noite
+          </label>
+          <label class="radio-option" onclick="selectRadio(this,'turno')">
+            <input type="radio" name="turno"> Qualquer turno
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Tem disponibilidade para cobrir colegas ou trabalhar nos fins de semana? <span class="req">*</span></label>
+      <div class="radio-grid cols3">
+        <label class="radio-option" onclick="selectRadio(this,'cobertura')">
+          <input type="radio" name="cobertura"> Sim, sem problema
+        </label>
+        <label class="radio-option" onclick="selectRadio(this,'cobertura')">
+          <input type="radio" name="cobertura"> Sim, com aviso prévio
+        </label>
+        <label class="radio-option" onclick="selectRadio(this,'cobertura')">
+          <input type="radio" name="cobertura"> Não tem disponibilidade
+        </label>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Tem alguma limitação de saúde que impede atividade física ou uso de produtos de limpeza?</label>
+      <div class="radio-grid cols3">
+        <label class="radio-option" onclick="selectRadio(this,'saude')">
+          <input type="radio" name="saude"> Não tem
+        </label>
+        <label class="radio-option" onclick="selectRadio(this,'saude')">
+          <input type="radio" name="saude"> Sim — alergia a produto
+        </label>
+        <label class="radio-option" onclick="selectRadio(this,'saude')">
+          <input type="radio" name="saude"> Sim — problema físico/motor
+        </label>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Quando poderia começar?</label>
+      <div class="radio-grid cols3">
+        <label class="radio-option" onclick="selectRadio(this,'inicio')">
+          <input type="radio" name="inicio"> Imediatamente
+        </label>
+        <label class="radio-option" onclick="selectRadio(this,'inicio')">
+          <input type="radio" name="inicio"> Em até 1 semana
+        </label>
+        <label class="radio-option" onclick="selectRadio(this,'inicio')">
+          <input type="radio" name="inicio"> Em 15 dias ou mais
+        </label>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- BLOCO 4: Perfil comportamental -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-num">4</div>
+    <div class="section-title">Perfil Comportamental</div>
+  </div>
+  <div class="section-body">
+
+    <div class="field">
+      <label>Como você se descreve no trabalho? <span class="tip">(pode marcar até 3)</span></label>
+      <div class="tag-row">
+        <div class="tag" onclick="toggleTag(this)">Pontual</div>
+        <div class="tag" onclick="toggleTag(this)">Organizado(a)</div>
+        <div class="tag" onclick="toggleTag(this)">Trabalhador(a)</div>
+        <div class="tag" onclick="toggleTag(this)">Detalhista</div>
+        <div class="tag" onclick="toggleTag(this)">Comunicativo(a)</div>
+        <div class="tag" onclick="toggleTag(this)">Discreto(a)</div>
+        <div class="tag" onclick="toggleTag(this)">Proativo(a)</div>
+        <div class="tag" onclick="toggleTag(this)">Tranquilo(a)</div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Como reage quando recebe uma correção ou crítica do supervisor?</label>
+      <div class="radio-grid">
+        <label class="radio-option" onclick="selectRadio(this,'critica')">
+          <input type="radio" name="critica"> Aceita bem e tenta melhorar
+        </label>
+        <label class="radio-option" onclick="selectRadio(this,'critica')">
+          <input type="radio" name="critica"> Depende de como é falado, mas aceita
+        </label>
+        <label class="radio-option" onclick="selectRadio(this,'critica')">
+          <input type="radio" name="critica"> Fica na defensiva / acha injusto
+        </label>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Já trabalhou com público / clientes presentes no ambiente?</label>
+      <div class="radio-grid cols3">
+        <label class="radio-option" onclick="selectRadio(this,'publico')">
+          <input type="radio" name="publico"> Sim, frequentemente
+        </label>
+        <label class="radio-option" onclick="selectRadio(this,'publico')">
+          <input type="radio" name="publico"> Sim, às vezes
+        </label>
+        <label class="radio-option" onclick="selectRadio(this,'publico')">
+          <input type="radio" name="publico"> Não tem experiência
+        </label>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Como foi o relacionamento com os colegas no último emprego?</label>
+      <div class="radio-grid cols3">
+        <label class="radio-option" onclick="selectRadio(this,'relac')">
+          <input type="radio" name="relac"> Muito bom / sem conflito
+        </label>
+        <label class="radio-option" onclick="selectRadio(this,'relac')">
+          <input type="radio" name="relac"> Normal / sem destaque
+        </label>
+        <label class="radio-option" onclick="selectRadio(this,'relac')">
+          <input type="radio" name="relac"> Teve algum conflito
+        </label>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Tem facilidade para seguir rotina fixa e lista de tarefas?</label>
+      <div class="radio-grid cols3">
+        <label class="radio-option" onclick="selectRadio(this,'rotina')">
+          <input type="radio" name="rotina"> Sim, prefere assim
+        </label>
+        <label class="radio-option" onclick="selectRadio(this,'rotina')">
+          <input type="radio" name="rotina"> Sim, se adapta bem
+        </label>
+        <label class="radio-option" onclick="selectRadio(this,'rotina')">
+          <input type="radio" name="rotina"> Prefere mais liberdade
+        </label>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- BLOCO 5: Situações práticas -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-num">5</div>
+    <div class="section-title">Situações Práticas</div>
+  </div>
+  <div class="section-body">
+
+    <div class="field">
+      <label>Situação: O supervisor passa uma tarefa extra no final do expediente. O que você faz?</label>
+      <div class="radio-grid">
+        <label class="radio-option" onclick="selectRadio(this,'sit1')">
+          <input type="radio" name="sit1"> Faz sem questionamento
+        </label>
+        <label class="radio-option" onclick="selectRadio(this,'sit1')">
+          <input type="radio" name="sit1"> Faz, mas explica se tiver impedimento real
+        </label>
+        <label class="radio-option" onclick="selectRadio(this,'sit1')">
+          <input type="radio" name="sit1"> Depende — avalia antes de responder
+        </label>
+        <label class="radio-option" onclick="selectRadio(this,'sit1')">
+          <input type="radio" name="sit1"> Questiona ou recusa se não estava no combinado
+        </label>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Situação: Você vai faltar por algum motivo urgente. O que faz?</label>
+      <div class="radio-grid">
+        <label class="radio-option" onclick="selectRadio(this,'sit2')">
+          <input type="radio" name="sit2"> Avisa com antecedência e traz atestado se necessário
+        </label>
+        <label class="radio-option" onclick="selectRadio(this,'sit2')">
+          <input type="radio" name="sit2"> Avisa no dia, mas não sempre traz documento
+        </label>
+        <label class="radio-option" onclick="selectRadio(this,'sit2')">
+          <input type="radio" name="sit2"> Manda mensagem mas nem sempre espera resposta
+        </label>
+        <label class="radio-option" onclick="selectRadio(this,'sit2')">
+          <input type="radio" name="sit2"> Às vezes não consegue avisar antes
+        </label>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Situação: Um cliente reclama do seu serviço na sua frente. Como você age?</label>
+      <div class="radio-grid">
+        <label class="radio-option" onclick="selectRadio(this,'sit3')">
+          <input type="radio" name="sit3"> Escuta, pede desculpa e refaz o que for preciso
+        </label>
+        <label class="radio-option" onclick="selectRadio(this,'sit3')">
+          <input type="radio" name="sit3"> Escuta e informa o supervisor
+        </label>
+        <label class="radio-option" onclick="selectRadio(this,'sit3')">
+          <input type="radio" name="sit3"> Fica sem jeito mas não sabe como agir
+        </label>
+        <label class="radio-option" onclick="selectRadio(this,'sit3')">
+          <input type="radio" name="sit3"> Tende a se defender
+        </label>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>O candidato demonstra entender o que é feito na função? <span class="tip">(impressão do entrevistador)</span></label>
+      <div class="radio-grid cols3">
+        <label class="radio-option" onclick="selectRadio(this,'entende')">
+          <input type="radio" name="entende"> Sim, claramente
+        </label>
+        <label class="radio-option" onclick="selectRadio(this,'entende')">
+          <input type="radio" name="entende"> Parcialmente
+        </label>
+        <label class="radio-option" onclick="selectRadio(this,'entende')">
+          <input type="radio" name="entende"> Pouco / vaga noção
+        </label>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- BLOCO 6: Avaliação -->
+<div class="section eval-section">
+  <div class="section-header">
+    <div class="section-num" style="background:rgba(255,255,255,0.25);color:white;">6</div>
+    <div class="section-title">Avaliação do Entrevistador</div>
+  </div>
+  <div class="section-body">
+
+    <div class="field">
+      <label>Classificação final <span class="req">*</span></label>
+      <div class="verdict-grid">
+        <button class="verdict-btn aprovado" onclick="selectVerdict(this,'aprovado')">✅ Aprovado(a)</button>
+        <button class="verdict-btn banco" onclick="selectVerdict(this,'banco')">🟡 Banco de Talentos</button>
+        <button class="verdict-btn nao" onclick="selectVerdict(this,'nao')">🔴 Não prosseguir</button>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="field">
+      <label>Possível encaixe <span class="tip">(pode marcar mais de um)</span></label>
+      <div class="tag-row">
+        <div class="tag" onclick="toggleTag(this)">Limpeza — escolas</div>
+        <div class="tag" onclick="toggleTag(this)">Limpeza — obras / SEMOB</div>
+        <div class="tag" onclick="toggleTag(this)">Limpeza — escritório / empresa</div>
+        <div class="tag" onclick="toggleTag(this)">Recepção</div>
+        <div class="tag" onclick="toggleTag(this)">Cobertura / eventual</div>
+        <div class="tag" onclick="toggleTag(this)">Liderança / encarregado(a)</div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Nota geral do candidato</label>
+      <div class="stars" id="stars">
+        <span class="star" onclick="setStars(1)">★</span>
+        <span class="star" onclick="setStars(2)">★</span>
+        <span class="star" onclick="setStars(3)">★</span>
+        <span class="star" onclick="setStars(4)">★</span>
+        <span class="star" onclick="setStars(5)">★</span>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="two-col">
+      <div class="field">
+        <label>✅ Pontos positivos</label>
+        <textarea placeholder="Ex: pontual, boa postura, experiência relevante..."></textarea>
+      </div>
+      <div class="field">
+        <label>⚠️ Pontos de atenção</label>
+        <textarea placeholder="Ex: mora longe, disponibilidade limitada..."></textarea>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Observações gerais</label>
+      <textarea style="min-height:80px" placeholder="Qualquer informação adicional relevante para o processo..."></textarea>
+    </div>
+
+  </div>
+</div>
+
+<div class="submit-row">
+  <button class="btn btn-secondary" onclick="clearForm()">Limpar formulário</button>
+  <button class="btn btn-primary" onclick="window.print()">🖨️ Salvar / Imprimir</button>
+</div>
+
+<script>
+  // Set today's date
+  document.getElementById('dataEntrevista').valueAsDate = new Date();
+
+  function selectRadio(el, name) {
+    document.querySelectorAll(`input[name="${name}"]`).forEach(r => {
+      r.closest('.radio-option').classList.remove('selected');
+    });
+    el.classList.add('selected');
+    el.querySelector('input').checked = true;
+    updateProgress();
+  }
+
+  function toggleTag(el) {
+    el.classList.toggle('selected');
+  }
+
+  function selectVerdict(btn, type) {
+    document.querySelectorAll('.verdict-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+
+  function setStars(n) {
+    const stars = document.querySelectorAll('.star');
+    stars.forEach((s, i) => s.classList.toggle('lit', i < n));
+  }
+
+  function updateProgress() {
+    const radios = ['exp','turno','cobertura','inicio','critica','sit1','sit2','sit3'];
+    let filled = 0;
+    radios.forEach(name => {
+      if (document.querySelector(`input[name="${name}"]:checked`)) filled++;
+    });
+    const pct = (filled / radios.length) * 100;
+    document.getElementById('progress').style.width = pct + '%';
+  }
+
+  function clearForm() {
+    if (!confirm('Limpar todos os campos?')) return;
+    document.querySelectorAll('input[type="text"]').forEach(i => i.value = '');
+    document.querySelectorAll('textarea').forEach(t => t.value = '');
+    document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
+    document.querySelectorAll('.radio-option').forEach(r => r.classList.remove('selected'));
+    document.querySelectorAll('.tag').forEach(t => t.classList.remove('selected'));
+    document.querySelectorAll('.verdict-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.star').forEach(s => s.classList.remove('lit'));
+    document.getElementById('dataEntrevista').valueAsDate = new Date();
+    updateProgress();
+  }
+
+  updateProgress();
+</script>
+
+<style>
+@media print {
+  body { padding: 0; background: white; }
+  .submit-row, .print-note, .progress-bar { display: none; }
+  .section { box-shadow: none; border: 1px solid #ccc; break-inside: avoid; }
+  .header { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+}
+</style>
+
+</body>
+</html>
